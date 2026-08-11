@@ -30,7 +30,7 @@ function App(): React.JSX.Element {
     window.api.saveDoc(newDoc)
   }
 
-  return <div className='flex flex-col h-screen w-screen '>
+  return <div className='flex flex-col h-screen w-screen overflow-hidden'>
     <TitleBar view={view} onGoHome={() => setView('home')} />
     {view === 'home' ? (
       <Home docs={docs} onSelectDoc={handleSelectDoc} onCreateDoc={handleCreateDoc} />
