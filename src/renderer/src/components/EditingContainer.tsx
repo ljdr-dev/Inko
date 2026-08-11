@@ -1,6 +1,7 @@
+import type { Doc } from '../types'
 
 interface EditingContainerProps {
-    selectedDoc: string | null
+    selectedDoc: Doc | null
 }
 
 
@@ -9,7 +10,7 @@ function EditingContainer({selectedDoc}: EditingContainerProps): React.JSX.Eleme
          {selectedDoc === null ? (
             <p className="flex text-gray-500">Selecciona una nota para empezar</p>
          ) : (
-            <p className="flex text-gray-500">{selectedDoc}</p>
+            <p className="flex text-gray-500">{selectedDoc.title}</p>
          )}
     </div>
 }

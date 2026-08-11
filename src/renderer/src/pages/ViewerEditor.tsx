@@ -1,8 +1,9 @@
 import ToolBar from "@renderer/components/ToolBar"
 import EditingContainer from "@renderer/components/EditingContainer"
+import type {Doc} from '../types'
 
 interface ViewerEditorProps {
-    selectedDoc: string | null
+    selectedDoc: Doc | null
 }
 
 function ViewerEditor( {selectedDoc}: ViewerEditorProps ): React.JSX.Element {
