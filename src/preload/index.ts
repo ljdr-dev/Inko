@@ -1,8 +1,12 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import type { Doc } from '../types'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  listDocs: (): Promise<Doc[]> => ipcRenderer.invoke('docs:list'),
+  saveDoc: (doc: Doc): Promise<void> => ipcRenderer.invoke('docs:save', doc)
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

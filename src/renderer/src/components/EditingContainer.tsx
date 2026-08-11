@@ -1,4 +1,4 @@
-import type { Doc } from '../types'
+import type { Doc } from '../../../types'
 
 interface EditingContainerProps {
     selectedDoc: Doc | null

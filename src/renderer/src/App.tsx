@@ -1,21 +1,21 @@
 import Home from './pages/Home'
 import ViewerEditor from './pages/ViewerEditor'
 import TitleBar from './components/TitleBar'
-import { useState } from 'react'
-import type {Doc} from './types'
+import { useState, useEffect } from 'react'
+import type {Doc} from '../../types'
 
 
 
 
 function App(): React.JSX.Element {
-  const [docs, setDocs] = useState<Doc[]>([
-    { id: crypto.randomUUID(), title: 'First Doc' },
-    { id: crypto.randomUUID(), title: 'Holidays' },
-    { id: crypto.randomUUID(), title: 'Brain Storming' }
-  ])
-
+  const [docs, setDocs] = useState<Doc[]>([])
   const [view, setView] = useState<'home' | 'editor'>('home')
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null)
+  useEffect(() => {
+    window.api.listDocs().then((loadedDocs) => {
+      setDocs(loadedDocs)
+    })
+  }, [])
 
   function handleSelectDoc(doc: Doc): void {
     setSelectedDoc(doc)
@@ -27,8 +27,9 @@ function App(): React.JSX.Element {
     setDocs([...docs, newDoc])
     setSelectedDoc(newDoc)
     setView('editor')
+    window.api.saveDoc(newDoc)
   }
-  
+
   return <div className='flex flex-col h-screen w-screen '>
     <TitleBar view={view} onGoHome={() => setView('home')} />
     {view === 'home' ? (

@@ -1,6 +1,6 @@
 import ToolBar from "@renderer/components/ToolBar"
 import EditingContainer from "@renderer/components/EditingContainer"
-import type {Doc} from '../types'
+import type {Doc} from '../../../types'
 
 interface ViewerEditorProps {
     selectedDoc: Doc | null
