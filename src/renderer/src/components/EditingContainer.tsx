@@ -15,7 +15,7 @@ function EditingContainer({selectedDoc, editor}: EditingContainerProps): React.J
             </div>
          ) : (
             <div className="flex flex-1 w-full overflow-y-auto text-mainText justify-center">
-                <EditorContent editor={editor} className='h-full w-full border-1 border-white/10 rounded-lg p-6 max-w-3xl' />
+                <EditorContent editor={editor} className='h-full w-full border-1 border-white/10 bg-cards rounded-lg p-6 max-w-3xl' />
             </div>
          )}
     </div>
