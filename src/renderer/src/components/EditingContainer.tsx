@@ -8,12 +8,14 @@ interface EditingContainerProps {
 
 
 function EditingContainer({selectedDoc, editor}: EditingContainerProps): React.JSX.Element {
-    return <div className="flex flex-1 h-full bg-canvas items-center justify-center">
+    return <div className="flex flex-1 bg-canvas">
          {selectedDoc === null ? (
-            <p className="flex text-gray-500">Selecciona un documento para empezar</p>
+            <div className="flex flex-1 items-center justify-center">
+                <p className="text-mutedText">Selecciona un documento para empezar</p>
+            </div>
          ) : (
-            <div className="flex-1 h-full w-full p-8 overflow-y-auto text-white">
-                <EditorContent editor={editor} className='h-full' />
+            <div className="flex flex-1 w-full overflow-y-auto text-mainText justify-center">
+                <EditorContent editor={editor} className='h-full w-full border-1 border-white/10 rounded-lg p-6 max-w-3xl' />
             </div>
          )}
     </div>
