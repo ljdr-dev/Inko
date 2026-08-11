@@ -24,7 +24,7 @@ function ViewerEditor( {selectedDoc, onUpdateDoc}: ViewerEditorProps ): React.JS
             }
         }
     })
-    return <div className="flex h-full w-full bg-gray-900">
+    return <div className="flex h-full w-full bg-canvas">
         <ToolBar editor={editor} />
         <EditingContainer selectedDoc={selectedDoc} editor={editor} />
     </div>

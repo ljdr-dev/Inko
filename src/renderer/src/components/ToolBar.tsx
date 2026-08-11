@@ -6,14 +6,14 @@ interface ToolBarProps {
 }
 
 function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
-    return <div className="flex gap-1 p-1 w-20 h-full bg-gray-950 sm:w-20 md:w-40">
+    return <div className="flex gap-1 p-1 w-20 h-full bg-cards sm:w-20 md:w-40">
         <button 
             onClick={() => editor?.chain().focus().toggleBold().run()}
-            className={clsx('p-2 rounded bg-gray-800 h-10', editor?.isActive('bold') && 'bg-purple-600')}
+            className={clsx('p-2 rounded bg-secondaryButton h-10 hover:bg-hover-secondaryButton', editor?.isActive('bold') && 'bg-active-secondaryButton')}
         >B</button>
         <button 
             onClick={() => editor?.chain().focus().toggleItalic().run()}
-            className={clsx('p-2 rounded bg-gray-800 h-10', editor?.isActive('italic') && 'bg-purple-600')}
+            className={clsx('p-2 rounded bg-secondaryButton h-10 hover:bg-hover-secondaryButton', editor?.isActive('italic') && 'bg-active-secondaryButton')}
         >I</button>
     </div>
 }
