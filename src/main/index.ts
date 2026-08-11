@@ -8,9 +8,15 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
+    minWidth: 600,
+    minHeight: 500,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
+    titleBarStyle: 'hidden',
+    ...(process.platform === 'darwin'
+      ? { trafficLightPosition: { x: 16, y: 16 } }
+      : { titleBarOverlay: { color: '#ffffff00', symbolColor: '#ffffff', height: 40 }}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
