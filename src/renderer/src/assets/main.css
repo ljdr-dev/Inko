@@ -5,8 +5,10 @@
   --color-mutedText: #a89a86;
 
   --color-canvas: #16130f;
-  --color-cards: #211c16;
   --color-accent: #e8a33d;
+
+  --color-cards: #211c16;
+  --color-hover-cards: #2b241c;
 
   --color-mainButton: #2b241c;
   --color-hover-mainButton: #362d23;
@@ -31,4 +33,23 @@ body {
   color: var(--color-mainText);
   font-size: 14px;
   user-select: none;
+}
+
+::-webkit-scrollbar{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-mainButton);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-hover-mainButton);
 }
