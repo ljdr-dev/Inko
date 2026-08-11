@@ -30,12 +30,18 @@ function App(): React.JSX.Element {
     window.api.saveDoc(newDoc)
   }
 
+  function handleUpdateDoc(updatedDoc: Doc): void {
+    setSelectedDoc(updatedDoc)
+    setDocs(docs.map((d) => (d.id === updatedDoc.id ? updatedDoc : d)))
+    window.api.saveDoc(updatedDoc)
+  }
+
   return <div className='flex flex-col h-screen w-screen overflow-hidden'>
     <TitleBar view={view} onGoHome={() => setView('home')} />
     {view === 'home' ? (
       <Home docs={docs} onSelectDoc={handleSelectDoc} onCreateDoc={handleCreateDoc} />
     ) : (
-      <ViewerEditor selectedDoc={selectedDoc} />
+      <ViewerEditor selectedDoc={selectedDoc} onUpdateDoc={handleUpdateDoc} />
     )}
   </div>
 }

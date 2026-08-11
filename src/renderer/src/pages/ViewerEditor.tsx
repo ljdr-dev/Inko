@@ -6,11 +6,18 @@ import { StarterKit } from '@tiptap/starter-kit'
 
 interface ViewerEditorProps {
     selectedDoc: Doc | null
+    onUpdateDoc: (doc: Doc) => void
 }
 
-function ViewerEditor( {selectedDoc}: ViewerEditorProps ): React.JSX.Element {
+function ViewerEditor( {selectedDoc, onUpdateDoc}: ViewerEditorProps ): React.JSX.Element {
     const editor = useEditor({ 
         extensions:[StarterKit], 
+        content: selectedDoc?.content,
+        onUpdate: ({ editor }) => {
+            if (selectedDoc) {
+                onUpdateDoc({...selectedDoc, content: editor.getJSON()})
+            }
+        },
         editorProps: {
             attributes: {
                 class: 'h-full outline-none'
@@ -18,7 +25,7 @@ function ViewerEditor( {selectedDoc}: ViewerEditorProps ): React.JSX.Element {
         }
     })
     return <div className="flex h-full w-full bg-gray-900">
-        <ToolBar />
+        <ToolBar editor={editor} />
         <EditingContainer selectedDoc={selectedDoc} editor={editor} />
     </div>
 }

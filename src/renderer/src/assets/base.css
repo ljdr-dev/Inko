@@ -10,6 +10,10 @@
   font-weight: normal;
 }
 
+strong, b {
+  font-weight: bold;
+}
+
 ul {
   list-style: none;
 }
