@@ -2,6 +2,8 @@ import { useState } from 'react'
 import type {Doc} from '../../../types'
 import { TrashIcon } from 'lucide-react'
 import ConfirmDialog from '../components/ConfirmDialog'
+import { generateHTML } from '@tiptap/core'
+import { tiptapExtensions } from '@renderer/tiptapExtensions'
 
 interface HomeProps {
     docs: Doc[]
@@ -13,14 +15,19 @@ interface HomeProps {
 function Home( { docs, onSelectDoc, onCreateDoc, onDeleteDoc }: HomeProps ): React.JSX.Element {
     const [docToDelete, setDocToDelete] = useState<Doc | null>(null)
 
+    function getPreviewHTML(doc: Doc): string {
+        if (!doc.content) return ''
+        return generateHTML(doc.content, tiptapExtensions)
+    }
+
     return <div className="flex flex-col flex-1 min-h-0 w-full bg-canvas items-center gap-3">
         <p className='pt-10'>Select or create a document</p>
         <button onClick={onCreateDoc} className="p-3 bg-mainButton rounded-lg cursor-pointer hover:bg-hover-mainButton transition-colors">New document</button>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] flex-1 min-h-0 w-full p-10 gap-5 overflow-y-auto">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] flex-1 min-h-0 w-full p-10 gap-5 overflow-y-auto">
             {docs.map((doc) => {
                 return (
                     <div key={doc.id} onClick={() => onSelectDoc(doc)} 
-                    className="group bg-cards p-2 border border-white/10 rounded-lg cursor-pointer hover:bg-hover-cards transition-colors">
+                    className="flex-1 group bg-cards h-100 p-2 border border-white/10 rounded-lg cursor-pointer overflow-hidden hover:bg-hover-cards transition-colors">
                         <div className='flex items-center gap-3'>
                             <p className='flex-1 font-medium truncate'>{doc.title}</p>
                             <button onClick={(e) =>  {
@@ -31,6 +38,10 @@ function Home( { docs, onSelectDoc, onCreateDoc, onDeleteDoc }: HomeProps ): Rea
                             ><TrashIcon size={14} />
                             </button>
                         </div>
+                        <div
+                            className='prose prose-invert prose-sm max-w-none h-full overflow-hidden text-mutedText pointer-events-none'
+                            dangerouslySetInnerHTML={{__html: getPreviewHTML(doc)}} 
+                        />
                     </div>
                 )
             })}
