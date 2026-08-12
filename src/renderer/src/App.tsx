@@ -46,7 +46,13 @@ function App(): React.JSX.Element {
   }
 
   return <div className='flex flex-col h-screen w-screen overflow-hidden'>
-    <TitleBar view={view} onGoHome={() => setView('home')} onDeleteDoc={() => selectedDoc && handleDeleteDoc(selectedDoc)} />
+    <TitleBar 
+      view={view} 
+      onGoHome={() => setView('home')} 
+      onDeleteDoc={() => selectedDoc && handleDeleteDoc(selectedDoc)} 
+      selectedDoc={selectedDoc}
+      onUpdateDoc={handleUpdateDoc}
+    />
     {view === 'home' ? (
       <Home docs={docs} onSelectDoc={handleSelectDoc} onCreateDoc={handleCreateDoc} onDeleteDoc={handleDeleteDoc} />
     ) : (
