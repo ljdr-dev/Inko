@@ -14,11 +14,11 @@ function ConfirmDialog({ message, icon, onConfirm, onCancel }: ConfirmDialogProp
             <div className="flex gap-3">
                 <button onClick={onCancel}
                 className="rounded-lg bg-secondaryButton px-4 py-2 hover:bg-hover-secondaryButton transition-colors">
-                    Cancelar
+                    Cancel
                 </button>
                 <button onClick={onConfirm}
                 className="rounded-lg bg-mainButton px-4 py-2 hover:bg-hover-mainButton transition-colors">
-                    Confirmar
+                    Confirm
                 </button>
             </div>
         </div>
