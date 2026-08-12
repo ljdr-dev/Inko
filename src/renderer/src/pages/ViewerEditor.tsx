@@ -5,6 +5,7 @@ import { useEditor } from "@tiptap/react"
 import { StarterKit } from '@tiptap/starter-kit'
 import { TextStyle } from "@tiptap/extension-text-style"
 import { FontFamily } from "@tiptap/extension-font-family"
+import { TextAlign } from '@tiptap/extension-text-align'
 
 interface ViewerEditorProps {
     selectedDoc: Doc | null
@@ -13,7 +14,7 @@ interface ViewerEditorProps {
 
 function ViewerEditor( {selectedDoc, onUpdateDoc}: ViewerEditorProps ): React.JSX.Element {
     const editor = useEditor({ 
-        extensions:[StarterKit, TextStyle, FontFamily], 
+        extensions:[StarterKit, TextStyle, FontFamily, TextAlign.configure({types: ['paragraph', 'heading'], defaultAlignment: 'left'})], 
         content: selectedDoc?.content,
         onUpdate: ({ editor }) => {
             if (selectedDoc) {

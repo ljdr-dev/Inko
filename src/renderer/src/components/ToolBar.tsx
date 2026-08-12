@@ -1,5 +1,5 @@
 import { Editor, useEditorState } from '@tiptap/react'
-import { Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Code } from 'lucide-react'
+import { Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Code, AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react'
 import clsx from 'clsx'
 import { ChainedCommands } from "@tiptap/react"
 import CustomSelect from './CustomSelect'
@@ -22,6 +22,12 @@ const buttonGroups: ToolBarButtonConfig[][] = [
         { command: (c) => c.toggleBold(), isActive: (e) => e.isActive('bold'), icon: <Bold size={16} /> },
         { command: (c) => c.toggleItalic(), isActive: (e) => e.isActive('italic'), icon: <Italic size={16} /> },
         { command: (c) => c.toggleStrike(), isActive: (e) => e.isActive('strike'), icon: <Strikethrough size={16} /> }
+    ],
+    [ // Alineación
+        { command: (c) => c.setTextAlign('left'), isActive: (e) => e.isActive({ textAlign: 'left' }), icon: <AlignLeft size={16} /> },
+        { command: (c) => c.setTextAlign('center'), isActive: (e) => e.isActive({ textAlign: 'center' }), icon: <AlignCenter size={16} /> },
+        { command: (c) => c.setTextAlign('right'), isActive: (e) => e.isActive({ textAlign: 'right' }), icon: <AlignRight size={16} /> },
+        { command: (c) => c.setTextAlign('justify'), isActive: (e) => e.isActive({ textAlign: 'justify' }), icon: <AlignJustify size={16} /> }
     ],
     [ // Headers
         { command: (c) => c.toggleHeading({level: 1}), isActive: (e) => e.isActive('heading', {level: 1}), icon: <Heading1 size={16} /> },
