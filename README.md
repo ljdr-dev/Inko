@@ -52,3 +52,5 @@ cd Inko
 npm install
 npm run dev
 ```
+## License
+MIT © 2026 [ljdr-dev](https://github.com/ljdr-dev)

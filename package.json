@@ -2,9 +2,10 @@
   "name": "Inko",
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
+  "license": "MIT",
   "main": "./out/main/index.js",
-  "author": "Javier Dzul",
-  "homepage": "https://electron-vite.org",
+  "author": "Luis Javier Dzul Rivas | ljdr-dev",
+  "homepage": "https://github.com/ljdr-dev/Inko",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
