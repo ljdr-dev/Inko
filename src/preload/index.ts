@@ -5,7 +5,8 @@ import type { Doc } from '../types'
 // Custom APIs for renderer
 const api = {
   listDocs: (): Promise<Doc[]> => ipcRenderer.invoke('docs:list'),
-  saveDoc: (doc: Doc): Promise<void> => ipcRenderer.invoke('docs:save', doc)
+  saveDoc: (doc: Doc): Promise<void> => ipcRenderer.invoke('docs:save', doc),
+  deleteDoc: (id: string): Promise<void> => ipcRenderer.invoke('docs:delete', id)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

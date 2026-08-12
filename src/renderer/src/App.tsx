@@ -36,8 +36,18 @@ function App(): React.JSX.Element {
     window.api.saveDoc(updatedDoc)
   }
 
+  function handleDeleteDoc(): void {
+    if (!selectedDoc) return
+
+    setDocs(docs.filter((d) => d.id !== selectedDoc.id))
+    setSelectedDoc(null)
+    setView('home')
+    window.api.deleteDoc(selectedDoc.id)
+
+  }
+
   return <div className='flex flex-col h-screen w-screen overflow-hidden'>
-    <TitleBar view={view} onGoHome={() => setView('home')} />
+    <TitleBar view={view} onGoHome={() => setView('home')} onDeleteDoc={handleDeleteDoc} />
     {view === 'home' ? (
       <Home docs={docs} onSelectDoc={handleSelectDoc} onCreateDoc={handleCreateDoc} />
     ) : (

@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { listDocs, saveDoc } from './storage'
+import { deleteDoc, listDocs, saveDoc } from './storage'
 import type { Doc } from '../types'
 
 function createWindow(): void {
@@ -59,6 +59,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle('docs:list', () => listDocs())
   ipcMain.handle('docs:save', (_event, doc: Doc) => saveDoc(doc))
+  ipcMain.handle('docs:delete', (_event, id: string) => deleteDoc(id))
 
   createWindow()
 

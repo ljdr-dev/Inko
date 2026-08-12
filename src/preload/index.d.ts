@@ -4,6 +4,7 @@ import type { Doc } from '../types'
 interface Api {
   listDocs: () => Promise<Doc[]>
   saveDoc: (doc: Doc) => Promise<void>
+  deleteDoc: (id: string) => Promise<void>
 }
 
 declare global {

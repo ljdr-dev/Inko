@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { app } from 'electron'
-import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
+import { mkdir, readdir, readFile, writeFile, unlink } from 'fs/promises'
 import type { Doc } from '../types'
 
 function getDocDir(): string {
@@ -26,4 +26,9 @@ export async function saveDoc(doc: Doc): Promise<void> {
     const dir = getDocDir()
     await mkdir(dir, { recursive: true })
     await writeFile(join(dir, `${doc.id}.json`), JSON.stringify(doc, null, 2))
+}
+
+export async function deleteDoc(id: string): Promise<void> {
+    const dir = getDocDir()
+    await unlink(join(dir, `${id}.json`))
 }
