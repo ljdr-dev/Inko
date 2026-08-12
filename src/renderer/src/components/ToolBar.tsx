@@ -2,12 +2,20 @@ import { Editor, useEditorState } from '@tiptap/react'
 import { Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Code } from 'lucide-react'
 import clsx from 'clsx'
 import { ChainedCommands } from "@tiptap/react"
+import CustomSelect from './CustomSelect'
 
 interface ToolBarButtonConfig {
     command: (chain: ChainedCommands) => ChainedCommands
     isActive: (editor: Editor) => boolean
     icon: React.ReactNode
 }
+
+const fontOptions = [
+    {label: 'Default (Inter)', value: ''},
+    {label: 'Serif', value: 'Georgia, serif'},
+    {label: 'MonoSpace', value: '"Courier New", monospace'},
+    {label: 'Sans-serif', value: 'Arial, sans-serif'}
+]
 
 const buttonGroups: ToolBarButtonConfig[][] = [
     [ // Bold, Italic, Strike
@@ -39,7 +47,25 @@ function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
         selector: ({editor}) => (editor ? buttonGroups.map((group) => group.map((button) => button.isActive(editor))) : [])
     })
 
+    const currentFontFamily = useEditorState({
+        editor,
+        selector: ({ editor }) => editor?.getAttributes('textStyle').fontFamily ?? null
+    })
+
     return <div className="flex flex-col gap-5 p-1 w-30 h-full bg-canvas rounded-lg border-1 border-white/10  sm:w-30 md:w-50">
+        <div className='flex flex-wrap gap-1 p-1'>
+            <CustomSelect
+                value={currentFontFamily ?? ''}
+                options={fontOptions}
+                onChange={(value) => {
+                    if (value === '') {
+                        editor?.chain().focus().unsetFontFamily().run()
+                    } else {
+                        editor?.chain().focus().setFontFamily(value).run()
+                    }
+                }} 
+            />
+        </div>
         {buttonGroups.map((group, groupIndex) => (
             <div key={groupIndex} className='flex flex-wrap gap-1 p-1'>
                 {group.map((button, buttonIndex) => (
