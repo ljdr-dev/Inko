@@ -29,6 +29,11 @@ function TitleBar( {view, onGoHome, onDeleteDoc, selectedDoc, onUpdateDoc}: Titl
                     <input 
                         value={selectedDoc?.title}
                         onChange={(e) => onUpdateDoc({ ...selectedDoc, title: e.target.value })}
+                        onBlur={() => {
+                            if (selectedDoc.title.trim() === ''){
+                                onUpdateDoc({ ...selectedDoc, title: 'Untitled document'})
+                            }
+                        }}
                         className="[field-sizing:content] max-w-[calc(100%-300px)] min-w-20 bg-transparent outline-none truncate text-mainText font-medium [-webkit-app-region:no-drag]"
                     />
                 )}
