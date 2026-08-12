@@ -1,8 +1,9 @@
 import { Editor, useEditorState } from '@tiptap/react'
-import { Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Code, AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react'
+import { Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Code, AlignLeft, AlignCenter, AlignRight, AlignJustify, ImageIcon } from 'lucide-react'
 import clsx from 'clsx'
 import { ChainedCommands } from "@tiptap/react"
 import CustomSelect from './CustomSelect'
+import { useRef } from 'react'
 
 interface ToolBarButtonConfig {
     command: (chain: ChainedCommands) => ChainedCommands
@@ -48,6 +49,8 @@ interface ToolBarProps {
 }
 
 function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
     const activeStates = useEditorState({
         editor,
         selector: ({editor}) => (editor ? buttonGroups.map((group) => group.map((button) => button.isActive(editor))) : [])
@@ -57,6 +60,21 @@ function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
         editor,
         selector: ({ editor }) => editor?.getAttributes('textStyle').fontFamily ?? null
     })
+
+    function handleImageClick(): void {
+        fileInputRef.current?.click()
+    }
+
+    function handleFileChange(e: React.ChangeEvent<HTMLInputElement>): void {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        const reader = new FileReader()
+        reader.onload = () => {
+            editor?.chain().focus().setImage({src: reader.result as string}).run()
+        }
+        reader.readAsDataURL(file)
+    }
 
     return <div className="flex flex-col gap-5 p-1 w-30 h-full bg-canvas rounded-lg border-1 border-white/10  sm:w-30 md:w-50">
         <div className='flex flex-wrap gap-1 p-1'>
@@ -71,6 +89,18 @@ function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
                     }
                 }} 
             />
+            <input
+                ref={fileInputRef}
+                type='file'
+                accept='image/*'
+                onChange={handleFileChange}
+                className='hidden'
+            />
+            <button
+                onClick={handleImageClick}
+                className='w-full rounded-lg truncate bg-secondaryButton p-2 text-left text-mainText cursor-pointer hover:bg-hover-secondaryButton transition-colors'
+            ><ImageIcon size={16}/>
+            </button>
         </div>
         {buttonGroups.map((group, groupIndex) => (
             <div key={groupIndex} className='flex flex-wrap gap-1 p-1'>
@@ -79,7 +109,7 @@ function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
                         key={buttonIndex}
                         onClick={() => editor && button.command(editor.chain().focus()).run()}
                         className={clsx(
-                            'flex-1 p-2 rounded-lg hover:bg-hover-secondaryButton transition-colors',
+                            'flex-1 p-2 rounded-lg cursor-pointer hover:bg-hover-secondaryButton transition-colors',
                             activeStates?.[groupIndex]?.[buttonIndex] ? 'bg-accent' : 'bg-secondaryButton'
                         )}
                     >{button.icon}

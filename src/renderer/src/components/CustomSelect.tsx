@@ -30,7 +30,7 @@ function CustomSelect({value, options, onChange}: CustomSelectProps): React.JSX.
     return <div ref={containerRef} className="relative w-full">
         <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="w-full rounded-lg truncate bg-secondaryButton p-2 text-left text-mainText"
+            className="w-full rounded-lg truncate bg-secondaryButton p-2 text-left text-mainText cursor-pointer hover:bg-hover-secondaryButton transition-colors"
         >{selectedOption?.label ?? 'Select'}
         </button>
         {isOpen && (
