@@ -20,7 +20,7 @@ function ViewerEditor( {selectedDoc, onUpdateDoc}: ViewerEditorProps ): React.JS
         },
         editorProps: {
             attributes: {
-                class: 'h-full outline-none'
+                class: 'h-full outline-none prose prose-invert max-w-none'
             }
         }
     })
