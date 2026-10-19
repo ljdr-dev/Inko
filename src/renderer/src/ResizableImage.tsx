@@ -13,6 +13,9 @@ export const ResizableImage = Image.extend({
             height: {
                 default: null,
                 renderHTML: (attributes) => (attributes.height ? {height: attributes.height} : {})
+            },
+            textAlign: {
+                default: 'center'
             }
         }
     },

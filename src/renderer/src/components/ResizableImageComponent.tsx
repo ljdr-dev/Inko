@@ -22,7 +22,15 @@ function ResizableImageComponent({node, updateAttributes, selected}: NodeViewPro
         window.addEventListener('mouseup', handleMouseUp)
     }
 
-    return <NodeViewWrapper className='relative inline-block'>
+    const textAlign = node.attrs.textAlign
+    const wrapperStyle: React.CSSProperties = 
+        textAlign === 'left'
+            ? { float: 'left', marginRight: '1rem', marginBottom: '0.5rem'}
+            : textAlign === 'right'
+            ? { float: 'right', marginLeft: '1rem', marginBottom: '0.5rem'}
+            : { display: 'block', width: 'fit-content', margin: '0 auto 1rem'}
+
+    return <NodeViewWrapper className='relative inline-block' style={wrapperStyle}>
         <img ref={imgRef} src={node.attrs.src} style={{width: node.attrs.width ? `${node.attrs.width}px` : 'auto'}} />
         {selected && (
             <div

@@ -9,5 +9,5 @@ export const tiptapExtensions = [
     TextStyle,
     FontFamily,
     ResizableImage,
-    TextAlign.configure({ types: ['paragraph', 'heading'], defaultAlignment: 'left' })
+    TextAlign.configure({ types: ['paragraph', 'heading', "image"], defaultAlignment: 'left' })
 ]
