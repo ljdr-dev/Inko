@@ -1,15 +1,18 @@
 import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
+import { Plus } from 'lucide-react'
 import { useRef } from "react";
 
 function ResizableImageComponent({node, updateAttributes, selected}: NodeViewProps): React.JSX.Element {
     const imgRef = useRef<HTMLImageElement>(null)
+    const textAlign = node.attrs.textAlign
     function handleMouseDown(e: React.MouseEvent): void {
         e.preventDefault()
         const startX = e.clientX
         const startWidth = node.attrs.width || imgRef.current?.offsetWidth || 300
+        const multiplier = textAlign === 'left' ? 1 : textAlign === 'right' ? -1 : 2
 
         function handleMouseMove(moveEvent: MouseEvent): void {
-            const newWidth = startWidth + (moveEvent.clientX - startX)
+            const newWidth = startWidth + (moveEvent.clientX - startX) * multiplier
             updateAttributes({width: Math.max(50, newWidth)})
         }
 
@@ -22,7 +25,6 @@ function ResizableImageComponent({node, updateAttributes, selected}: NodeViewPro
         window.addEventListener('mouseup', handleMouseUp)
     }
 
-    const textAlign = node.attrs.textAlign
     const wrapperStyle: React.CSSProperties = 
         textAlign === 'left'
             ? { float: 'left', marginRight: '1rem', marginBottom: '0.5rem'}
@@ -35,8 +37,10 @@ function ResizableImageComponent({node, updateAttributes, selected}: NodeViewPro
         {selected && (
             <div
                 onMouseDown={handleMouseDown}
-                className="absolute bottom-0 right-0 h-3 w-3 cursor-se-resize rounded-full bg-accent"
-            />
+                className={`absolute bottom-0 h-5 w-5 translate-y-1/2 ${ textAlign === 'right' ? 'left-0 cursor-sw-resize -translate-x-1/2' : 'right-0 cursor-se-resize translate-x-1/2' }`}
+            >
+                <Plus size={20}/>
+            </div>
         )}
     </NodeViewWrapper>
 }
