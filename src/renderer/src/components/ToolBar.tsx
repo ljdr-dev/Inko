@@ -82,6 +82,8 @@ function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
         editor,
         selector: ({ editor }) => {
             if (!editor || !editor.isInitialized) return null
+            const explicitSize = editor.getAttributes('textStyle').fontSize
+            if (explicitSize) return explicitSize
             const { from } = editor.state.selection
             const { node } = editor.view.domAtPos(from)
             const element = node instanceof HTMLElement ? node : node.parentElement
