@@ -34,7 +34,7 @@ function CustomSelect({value, options, onChange}: CustomSelectProps): React.JSX.
         >{selectedOption?.label ?? 'Select'}
         </button>
         {isOpen && (
-            <div className="absolute left-20 top-full z-10 w-50 overflow-y-auto min-h-0 max-h-200 rounded-lg border border-white/10 bg-cards">
+            <div className="absolute left-20 top-full z-10 w-50 overflow-y-auto min-h-0 max-h-100 rounded-lg border border-white/10 bg-cards">
                 {options.map((option) => (
                     <button
                         key={option.value}

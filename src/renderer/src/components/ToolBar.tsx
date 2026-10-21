@@ -18,13 +18,30 @@ const fontOptions = [
     {label: 'Sans-serif', value: 'Arial, sans-serif'}
 ]
 
+const fontSizeOptions = [
+    {label: '10', value: '10px'},
+    {label: '12', value: '12px'},
+    {label: '14', value: '14px'},
+    {label: '16', value: '16px'},
+    {label: '18', value: '18px'},
+    {label: '20', value: '20px'},
+    {label: '22', value: '22px'},
+    {label: '24', value: '24px'},
+    {label: '26', value: '26px'},
+    {label: '28', value: '28px'},
+    {label: '30', value: '30px'},
+    {label: '32', value: '32px'},
+    {label: '34', value: '34px'},
+    {label: '36', value: '36px'}
+]
+
 const buttonGroups: ToolBarButtonConfig[][] = [
     [ // Bold, Italic, Strike
         { command: (c) => c.toggleBold(), isActive: (e) => e.isActive('bold'), icon: <Bold size={16} /> },
         { command: (c) => c.toggleItalic(), isActive: (e) => e.isActive('italic'), icon: <Italic size={16} /> },
         { command: (c) => c.toggleStrike(), isActive: (e) => e.isActive('strike'), icon: <Strikethrough size={16} /> }
     ],
-    [ // Alineación
+    [ // Alignment
         { command: (c) => c.setTextAlign('left'), isActive: (e) => e.isActive({ textAlign: 'left' }), icon: <AlignLeft size={16} /> },
         { command: (c) => c.setTextAlign('center'), isActive: (e) => e.isActive({ textAlign: 'center' }), icon: <AlignCenter size={16} /> },
         { command: (c) => c.setTextAlign('right'), isActive: (e) => e.isActive({ textAlign: 'right' }), icon: <AlignRight size={16} /> },
@@ -61,6 +78,21 @@ function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
         selector: ({ editor }) => editor?.getAttributes('textStyle').fontFamily ?? null
     })
 
+    const currentFontSize = useEditorState({
+        editor,
+        selector: ({ editor }) => {
+            if (!editor || !editor.isInitialized) return null
+            const { from } = editor.state.selection
+            const { node } = editor.view.domAtPos(from)
+            const element = node instanceof HTMLElement ? node : node.parentElement
+            if (!element) return null
+            const size = window.getComputedStyle(element).fontSize
+            const parsedSize = parseFloat(size)
+            const roundedSize = Math.round(parsedSize)
+            return `${roundedSize}px`
+        }
+    })
+
     function handleImageClick(): void {
         fileInputRef.current?.click()
     }
@@ -87,6 +119,13 @@ function ToolBar( { editor }: ToolBarProps): React.JSX.Element {
                     } else {
                         editor?.chain().focus().setFontFamily(value).run()
                     }
+                }} 
+            />
+            <CustomSelect
+                value={currentFontSize ?? ''}
+                options={fontSizeOptions}
+                onChange={(value) => {
+                    editor?.chain().focus().setFontSize(value).run()
                 }} 
             />
             <input

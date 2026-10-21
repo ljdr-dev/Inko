@@ -1,6 +1,5 @@
 import { StarterKit } from '@tiptap/starter-kit'
-import { TextStyle } from "@tiptap/extension-text-style"
-import { FontFamily } from "@tiptap/extension-font-family"
+import { TextStyle, FontSize, FontFamily } from "@tiptap/extension-text-style"
 import { TextAlign } from '@tiptap/extension-text-align'
 import { ResizableImage } from './ResizableImage'
 
@@ -8,6 +7,7 @@ export const tiptapExtensions = [
     StarterKit,
     TextStyle,
     FontFamily,
+    FontSize,
     ResizableImage,
     TextAlign.configure({ types: ['paragraph', 'heading', "image"], defaultAlignment: 'left' })
 ]
