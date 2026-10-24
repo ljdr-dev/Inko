@@ -8,10 +8,11 @@ interface TitleBarProps {
     onGoHome: () => void
     onDeleteDoc: () => void
     selectedDoc: Doc | null
+    onRenameDoc: (doc: Doc) => void
     onUpdateDoc: (doc: Doc) => void
 }
 
-function TitleBar( {view, onGoHome, onDeleteDoc, selectedDoc, onUpdateDoc}: TitleBarProps): React.JSX.Element {
+function TitleBar( {view, onGoHome, onDeleteDoc, selectedDoc, onRenameDoc, onUpdateDoc}: TitleBarProps): React.JSX.Element {
     const [showConfirm, setShowConfirm] = useState(false)
     return <div className="flex w-full h-10 shrink-0 bg-canvas [-webkit-app-region:drag]">
         {view === 'editor' ? (
@@ -29,11 +30,10 @@ function TitleBar( {view, onGoHome, onDeleteDoc, selectedDoc, onUpdateDoc}: Titl
                     <input 
                         value={selectedDoc?.title}
                         onChange={(e) => onUpdateDoc({ ...selectedDoc, title: e.target.value })}
-                        onBlur={() => {
-                            if (selectedDoc.title.trim() === ''){
-                                onUpdateDoc({ ...selectedDoc, title: 'Untitled document'})
-                            }
-                        }}
+                        onBlur={() => onRenameDoc({
+                            ...selectedDoc,
+                            title: selectedDoc.title.trim() === '' ? 'Untitled document': selectedDoc.title
+                        })}
                         className="[field-sizing:content] max-w-[calc(100%-300px)] min-w-20 bg-transparent outline-none truncate text-mainText font-medium [-webkit-app-region:no-drag]"
                     />
                 )}

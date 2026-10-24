@@ -29,6 +29,7 @@ function App(): React.JSX.Element {
     if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current)
     maxWaitTimerRef.current = null
     pendingDocRef.current = null
+    console.log('Guardado')
     window.api.saveDoc(doc)
   }
 
@@ -38,6 +39,16 @@ function App(): React.JSX.Element {
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
     debounceTimerRef.current = setTimeout(flushSave, SAVE_DEBOUNCE_MS)
     if (maxWaitTimerRef.current === null) maxWaitTimerRef.current = setTimeout(flushSave, SAVE_MAX_WAIT_MS)
+  }
+
+  function handleGoHome(): void {
+    flushSave()
+    setView('home')
+  }
+
+  function handleRenameDoc(doc: Doc): void {
+    if (doc.title !== selectedDoc?.title) handleUpdateDoc(doc)
+    flushSave()
   }
 
   function handleSelectDoc(doc: Doc): void {
@@ -71,9 +82,10 @@ function App(): React.JSX.Element {
   return <div className='flex flex-col h-screen w-screen overflow-hidden'>
     <TitleBar 
       view={view} 
-      onGoHome={() => setView('home')} 
+      onGoHome={handleGoHome} 
       onDeleteDoc={() => selectedDoc && handleDeleteDoc(selectedDoc)} 
       selectedDoc={selectedDoc}
+      onRenameDoc={handleRenameDoc}
       onUpdateDoc={handleUpdateDoc}
     />
     {view === 'home' ? (
