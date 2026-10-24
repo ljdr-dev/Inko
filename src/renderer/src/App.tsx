@@ -29,7 +29,6 @@ function App(): React.JSX.Element {
     if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current)
     maxWaitTimerRef.current = null
     pendingDocRef.current = null
-    console.log('Guardado')
     window.api.saveDoc(doc)
   }
 
