@@ -29,7 +29,6 @@ function App(): React.JSX.Element {
     if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current)
     maxWaitTimerRef.current = null
     pendingDocRef.current = null
-    console.log('Documento guardado')
     window.api.saveDoc(doc)
   }
 
@@ -37,7 +36,6 @@ function App(): React.JSX.Element {
     if (pendingDocRef.current && pendingDocRef.current.id !== doc.id) flushSave()
     pendingDocRef.current = doc
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
-    console.log('Temporizadores seteados')
     debounceTimerRef.current = setTimeout(flushSave, SAVE_DEBOUNCE_MS)
     if (maxWaitTimerRef.current === null) maxWaitTimerRef.current = setTimeout(flushSave, SAVE_MAX_WAIT_MS)
   }
