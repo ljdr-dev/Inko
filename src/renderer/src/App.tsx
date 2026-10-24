@@ -32,13 +32,17 @@ function App(): React.JSX.Element {
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [])
 
-  function flushSave(): void {
-    const doc = pendingDocRef.current
-    if (!doc) return
+  function clearSaveTimers(): void {
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
     debounceTimerRef.current = null
     if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current)
     maxWaitTimerRef.current = null
+  }
+
+  function flushSave(): void {
+    const doc = pendingDocRef.current
+    if (!doc) return
+    clearSaveTimers()
     pendingDocRef.current = null
     window.api.saveDoc(doc)
   }
@@ -49,6 +53,11 @@ function App(): React.JSX.Element {
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
     debounceTimerRef.current = setTimeout(flushSave, SAVE_DEBOUNCE_MS)
     if (maxWaitTimerRef.current === null) maxWaitTimerRef.current = setTimeout(flushSave, SAVE_MAX_WAIT_MS)
+  }
+
+  function cancelPendingSave(): void {
+    clearSaveTimers()
+    pendingDocRef.current = null
   }
 
   function handleGoHome(): void {
@@ -86,6 +95,7 @@ function App(): React.JSX.Element {
       setSelectedDoc(null)
       setView('home')
     }
+    if (doc.id === pendingDocRef.current?.id) cancelPendingSave()
     window.api.deleteDoc(doc.id)
   }
 
