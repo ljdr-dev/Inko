@@ -1,21 +1,46 @@
 import Home from './pages/Home'
 import ViewerEditor from './pages/ViewerEditor'
 import TitleBar from './components/TitleBar'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type {Doc} from '../../types'
 
 
-
+const SAVE_DEBOUNCE_MS = 2000
+const SAVE_MAX_WAIT_MS = 30000
 
 function App(): React.JSX.Element {
   const [docs, setDocs] = useState<Doc[]>([])
   const [view, setView] = useState<'home' | 'editor'>('home')
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null)
+  const pendingDocRef = useRef<Doc | null>(null)
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const maxWaitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
     window.api.listDocs().then((loadedDocs) => {
       setDocs(loadedDocs)
     })
   }, [])
+
+  function flushSave(): void {
+    const doc = pendingDocRef.current
+    if (!doc) return
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
+    debounceTimerRef.current = null
+    if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current)
+    maxWaitTimerRef.current = null
+    pendingDocRef.current = null
+    console.log('Documento guardado')
+    window.api.saveDoc(doc)
+  }
+
+  function scheduleSave(doc: Doc): void {
+    if (pendingDocRef.current && pendingDocRef.current.id !== doc.id) flushSave()
+    pendingDocRef.current = doc
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
+    console.log('Temporizadores seteados')
+    debounceTimerRef.current = setTimeout(flushSave, SAVE_DEBOUNCE_MS)
+    if (maxWaitTimerRef.current === null) maxWaitTimerRef.current = setTimeout(flushSave, SAVE_MAX_WAIT_MS)
+  }
 
   function handleSelectDoc(doc: Doc): void {
     setSelectedDoc(doc)
@@ -33,7 +58,7 @@ function App(): React.JSX.Element {
   function handleUpdateDoc(updatedDoc: Doc): void {
     setSelectedDoc(updatedDoc)
     setDocs(docs.map((d) => (d.id === updatedDoc.id ? updatedDoc : d)))
-    window.api.saveDoc(updatedDoc)
+    scheduleSave(updatedDoc)
   }
 
   function handleDeleteDoc(doc: Doc): void {
