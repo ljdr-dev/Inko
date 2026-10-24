@@ -21,6 +21,17 @@ function App(): React.JSX.Element {
     })
   }, [])
 
+  useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent): void {
+            if (e.ctrlKey && e.key.toLowerCase() === 's') {
+              e.preventDefault()
+              flushSave()
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [])
+
   function flushSave(): void {
     const doc = pendingDocRef.current
     if (!doc) return
