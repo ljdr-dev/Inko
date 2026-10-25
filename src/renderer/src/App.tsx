@@ -22,6 +22,13 @@ function App(): React.JSX.Element {
   }, [])
 
   useEffect(() => {
+    return window.api.onBeforeClose(async () => {
+      await flushSave()
+      window.api.readyToClose()
+    })
+  }, [])
+
+  useEffect(() => {
         function handleKeyDown(e: KeyboardEvent): void {
             if (e.ctrlKey && e.key.toLowerCase() === 's') {
               e.preventDefault()
@@ -39,12 +46,12 @@ function App(): React.JSX.Element {
     maxWaitTimerRef.current = null
   }
 
-  function flushSave(): void {
+  function flushSave(): Promise<void> {
     const doc = pendingDocRef.current
-    if (!doc) return
+    if (!doc) return Promise.resolve()
     clearSaveTimers()
     pendingDocRef.current = null
-    window.api.saveDoc(doc)
+    return window.api.saveDoc(doc)
   }
 
   function scheduleSave(doc: Doc): void {

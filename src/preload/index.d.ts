@@ -5,6 +5,8 @@ interface Api {
   listDocs: () => Promise<Doc[]>
   saveDoc: (doc: Doc) => Promise<void>
   deleteDoc: (id: string) => Promise<void>
+  readyToClose: () => void
+  onBeforeClose: (callback: () => void) => () => void
 }
 
 declare global {

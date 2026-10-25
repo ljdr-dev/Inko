@@ -6,7 +6,13 @@ import type { Doc } from '../types'
 const api = {
   listDocs: (): Promise<Doc[]> => ipcRenderer.invoke('docs:list'),
   saveDoc: (doc: Doc): Promise<void> => ipcRenderer.invoke('docs:save', doc),
-  deleteDoc: (id: string): Promise<void> => ipcRenderer.invoke('docs:delete', id)
+  deleteDoc: (id: string): Promise<void> => ipcRenderer.invoke('docs:delete', id),
+  readyToClose: (): void => ipcRenderer.send('app:ready-to-close'),
+  onBeforeClose: (callback: () => void): (() => void) => {
+    const listener = () => callback()
+    ipcRenderer.on('app:before-close', listener)
+    return () => ipcRenderer.removeListener('app:before-close', listener)
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

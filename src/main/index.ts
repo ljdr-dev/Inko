@@ -5,6 +5,8 @@ import icon from '../../resources/icon.png?asset'
 import { deleteDoc, listDocs, saveDoc } from './storage'
 import type { Doc } from '../types'
 
+const CLOSE_TIMEOUT_MS = 3000
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -27,6 +29,27 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  let canClose = false
+  let isClosing = false
+
+  mainWindow.on('close', (e) => {
+      if (canClose) return
+      e.preventDefault()
+      if (isClosing) return
+      isClosing = true
+
+      function finishClose(): void {
+        if (canClose) return
+        canClose = true
+        ipcMain.removeListener('app:ready-to-close', finishClose)
+        mainWindow.close()
+      }
+
+      ipcMain.once('app:ready-to-close', finishClose)
+      setTimeout(finishClose, CLOSE_TIMEOUT_MS)
+      mainWindow.webContents.send('app:before-close')
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
